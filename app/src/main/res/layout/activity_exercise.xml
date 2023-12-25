@@ -108,6 +108,17 @@
                 android:textSize="20sp"
                 android:textStyle="bold|italic" />
         </TableRow>
+        <TextView
+            android:id="@+id/textView_setInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Click the + to add a set"
+            android:padding="8dp"
+            android:layout_margin="12dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="italic"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_sets"
             android:layout_width="match_parent"

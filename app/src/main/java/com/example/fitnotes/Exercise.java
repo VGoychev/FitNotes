@@ -8,29 +8,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.fitnotes.exercise.ExerciseAdapter;
 import com.example.fitnotes.exercise.ExerciseItem;
 import com.example.fitnotes.set.SetAdapter;
 import com.example.fitnotes.set.SetItem;
 import com.example.fitnotes.set.SetItemChangeListener;
 import com.example.fitnotes.workout.AppDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Exercise extends AppCompatActivity implements SetItemChangeListener {
-    TextView setAdd, exerciseName;
+    TextView setAdd, exerciseName, textViewInstructions;
     Button btnSetAdd;
     RecyclerView recyclerView;
     SetAdapter recyclerViewAdapter;
-//    private Handler handler = new Handler();
 
 
     @Override
@@ -41,7 +36,7 @@ public class Exercise extends AppCompatActivity implements SetItemChangeListener
         setAdd = findViewById(R.id.textView_setAdd);
         exerciseName = findViewById(R.id.textView_exerciseName);
         btnSetAdd = findViewById(R.id.btnAddSet);
-
+        textViewInstructions = findViewById(R.id.textView_setInstructions);
         String selectedExerciseName = getIntent().getStringExtra("EXERCISE_NAME");
         exerciseName.setText(selectedExerciseName);
 
@@ -131,7 +126,7 @@ public class Exercise extends AppCompatActivity implements SetItemChangeListener
             // Fetch exercises associated with the selected workout ID
             List<SetItem> setsForExercise = database.setDao().getSetsForExercise(exerciseId);
             recyclerViewAdapter.setSetList(setsForExercise);
-//            recyclerViewAdapter.notifyDataSetChanged();
+            updateInstructionsVisibility();
         } else {
             Log.e("WorkoutActivity", "No workout ID found in the intent");
         }
@@ -164,11 +159,11 @@ public class Exercise extends AppCompatActivity implements SetItemChangeListener
                         // Notify the adapter that the item at this position has been updated
                         recyclerViewAdapter.notifyItemChanged(position);
                     }
+                    updateInstructionsVisibility();
                 }
             }
 
         }
-//        recyclerViewAdapter.addSet();
     }
 
     public void initRecyclerView() {
@@ -189,10 +184,14 @@ public class Exercise extends AppCompatActivity implements SetItemChangeListener
         AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
         database.setDao().delete(setItem);
         recyclerViewAdapter.removeSetItem(setItem);
+        updateInstructionsVisibility();
 
     }
-//    private void addInitialSets() {
-//        // Call the adapter method to add three initial sets
-//        recyclerViewAdapter.addInitialSets(3);
-//    }
+    private void updateInstructionsVisibility() {
+        if (recyclerViewAdapter.getItemCount() == 0) {
+            textViewInstructions.setVisibility(View.VISIBLE);
+        } else {
+            textViewInstructions.setVisibility(View.GONE);
+        }
+    }
 }

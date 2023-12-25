@@ -57,8 +57,6 @@ public class Workout extends AppCompatActivity implements ExerciseInterface {
         initRecyclerView();
         loadExerciseList();
         updateInstructionsVisibility();
-        recyclerViewAdapter.setExerciseInterface(this);
-
     }
     @Override
     public void onItemClick(ExerciseItem exerciseItem) {
@@ -161,6 +159,7 @@ public class Workout extends AppCompatActivity implements ExerciseInterface {
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerViewAdapter = new ExerciseAdapter(this);
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.setExerciseInterface(this);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new Workout.SwipeToDeleteCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);

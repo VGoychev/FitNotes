@@ -27,12 +27,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.ViewHolder> {
     private List<SetItem> setList;
     private SetItemChangeListener itemChangeListener;
 
-    //    public void addInitialSets(int count) {
-//        for (int i = 0; i < count; i++) {
-//            setList.add(new SetItem()); // Create a new SetItem and add it to the list
-//        }
-//        notifyDataSetChanged(); // Notify adapter that data set has changed
-//    }
     public void setItemChangeListener(SetItemChangeListener listener) {
         this.itemChangeListener = listener;
     }
@@ -41,6 +35,10 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.ViewHolder> {
         if (position != -1) {
             setList.remove(position);
             notifyItemRemoved(position);
+
+            for (int i = position; i < setList.size(); i++) {
+                notifyItemChanged(i); // Notify to rebind the view
+            }
         }
     }
     public void addSet(SetItem newItem) {
@@ -73,8 +71,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.ViewHolder> {
         SetItem set = setList.get(position);
         holder.textView_setNumber.setText(String.valueOf(position + 1));
 
-//        int storedRep = set.getStoredRep();
-//        double storedWeight = set.getStoredWeight();
         holder.editText_rep.setTag(position);
 
         holder.editText_rep.addTextChangedListener(new TextWatcher() {
@@ -163,31 +159,6 @@ public class SetAdapter extends RecyclerView.Adapter<SetAdapter.ViewHolder> {
         holder.editText_rep.setText(String.valueOf(set.getStoredRep()));
         holder.editText_weight.setText(String.valueOf(set.getStoredWeight()));
 
-//        holder.editText_rep.setOnFocusChangeListener((v, hasFocus) -> {
-//            if (!hasFocus) {
-//                String newValueStr = holder.editText_rep.getText().toString();
-//                try {
-//                    int newValue = Integer.parseInt(newValueStr);
-//                    setList.get(position).setStoredRep(newValue);
-//                    itemChangeListener.onRepValueChanged(position, newValue);
-//                } catch (NumberFormatException e) {
-//                    // Handle invalid input if needed
-//                }
-//            }
-//        });
-//
-//        holder.editText_weight.setOnFocusChangeListener((v, hasFocus) -> {
-//            if (!hasFocus) {
-//                String newValueStr = holder.editText_weight.getText().toString();
-//                try {
-//                    double newValue = Double.parseDouble(newValueStr);
-//                    setList.get(position).setStoredWeight(newValue);
-//                    itemChangeListener.onWeightValueChanged(position, newValue);
-//                } catch (NumberFormatException e) {
-//
-//                }
-//            }
-//        });
     }
 
     @Override
