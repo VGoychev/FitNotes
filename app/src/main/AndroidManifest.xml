@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FitNotes"
         tools:targetApi="31">
         <activity
+            android:name=".Exercise"
+            android:exported="false" />
+        <activity
             android:name=".Workout"
             android:exported="false" />
         <activity

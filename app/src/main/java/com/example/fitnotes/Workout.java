@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,13 +23,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.fitnotes.exercise.ExerciseAdapter;
+import com.example.fitnotes.exercise.ExerciseInterface;
 import com.example.fitnotes.exercise.ExerciseItem;
 import com.example.fitnotes.workout.AppDatabase;
 import com.example.fitnotes.workout.WorkoutItem;
 
 import java.util.List;
 
-public class Workout extends AppCompatActivity {
+public class Workout extends AppCompatActivity implements ExerciseInterface {
     Button btnAddExercise;
     RecyclerView recyclerView;
     TextView textViewWorkoutName, textViewInstructions;
@@ -39,7 +41,6 @@ public class Workout extends AppCompatActivity {
         setContentView(R.layout.activity_workout);
 
         btnAddExercise = findViewById(R.id.btnAddExercise);
-        recyclerView = findViewById(R.id.recycler_exercise);
         textViewWorkoutName = findViewById(R.id.textView_workoutName);
         textViewInstructions = findViewById(R.id.textViewInstructions);
 
@@ -56,6 +57,15 @@ public class Workout extends AppCompatActivity {
         initRecyclerView();
         loadExerciseList();
         updateInstructionsVisibility();
+        recyclerViewAdapter.setExerciseInterface(this);
+
+    }
+    @Override
+    public void onItemClick(ExerciseItem exerciseItem) {
+        Intent intent = new Intent(Workout.this, Exercise.class);
+        intent.putExtra("EXERCISE_NAME", exerciseItem.getExerciseName()); // Pass workout details
+        intent.putExtra("EXERCISE_ID", exerciseItem.getId());
+        startActivity(intent);
     }
     private void showAddExerciseDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogBackground);
@@ -184,6 +194,4 @@ public class Workout extends AppCompatActivity {
             updateInstructionsVisibility();
         }
     }
-
-
 }

@@ -9,11 +9,14 @@ import androidx.room.RoomDatabase;
 
 import com.example.fitnotes.exercise.ExerciseDao;
 import com.example.fitnotes.exercise.ExerciseItem;
+import com.example.fitnotes.set.SetDao;
+import com.example.fitnotes.set.SetItem;
 
-@Database(entities = {WorkoutItem.class, ExerciseItem.class}, version = 1)
+@Database(entities = {WorkoutItem.class, ExerciseItem.class, SetItem.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WorkoutDao workoutDao();
     public abstract ExerciseDao exerciseDao();
+    public abstract SetDao setDao();
 
     private static AppDatabase INSTANCE;
 

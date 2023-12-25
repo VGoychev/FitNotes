@@ -18,4 +18,16 @@ public class ExerciseItem {
     public String exerciseName;
     @ColumnInfo(name = "workout_id")
     public int workoutId;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+    public int getWorkoutId() {
+        return workoutId;
+    }
 }

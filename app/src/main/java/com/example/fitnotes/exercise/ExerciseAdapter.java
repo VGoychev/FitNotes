@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnotes.R;
 import com.example.fitnotes.workout.WorkoutAdapter;
+import com.example.fitnotes.workout.WorkoutInterface;
 import com.example.fitnotes.workout.WorkoutItem;
 
 import java.util.List;
@@ -18,6 +19,10 @@ import java.util.List;
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder> {
     private List<ExerciseItem> exerciseList;
     private Context context;
+    private ExerciseInterface exerciseInterface;
+    public void setExerciseInterface(ExerciseInterface exerciseInterface) {
+        this.exerciseInterface = exerciseInterface;
+    }
 
     public void setExerciseList(List<ExerciseItem> exerciseList){
         this.exerciseList = exerciseList;
@@ -48,6 +53,17 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ExerciseAdapter.ViewHolder holder, int position) {
         holder.textView_exercise_name.setText(this.exerciseList.get(position).exerciseName);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (exerciseInterface != null) {
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        exerciseInterface.onItemClick(exerciseList.get(position));
+                    }
+                }
+            }
+        });
     }
 
     @Override
