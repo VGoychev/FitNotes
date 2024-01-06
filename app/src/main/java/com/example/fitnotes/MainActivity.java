@@ -120,7 +120,9 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
         recyclerView.setAdapter(recyclerViewAdapter);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback());
+        ItemTouchHelper itemTouchHelper1 = new ItemTouchHelper(new DragAndDropCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper1.attachToRecyclerView(recyclerView);
     }
 
     private void loadWorkoutList() {
@@ -129,7 +131,25 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
         recyclerViewAdapter.setWorkoutList(workoutList);
     }
 
+    private class DragAndDropCallback extends ItemTouchHelper.SimpleCallback{
+        DragAndDropCallback(){
+            super(ItemTouchHelper.UP | ItemTouchHelper.DOWN,0);
+        }
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
 
+            // Notify the adapter of the move
+            recyclerViewAdapter.moveWorkoutItem(fromPosition, toPosition);
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    }
     private class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
         SwipeToDeleteCallback() {
             super(0, ItemTouchHelper.LEFT);
