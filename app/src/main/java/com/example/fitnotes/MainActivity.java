@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 
 import android.widget.TextView;
@@ -33,6 +34,8 @@ import com.example.fitnotes.workout.WorkoutItem;
 
 import java.util.ArrayList;
 
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
     Button btnAddWorkout;
     TextView txtViewInstructions;
     private WorkoutAdapter recyclerViewAdapter;
-
+    CalendarView calendarView;
+    Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,15 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
 
         btnAddWorkout = findViewById(R.id.btnAddWorkout);
         txtViewInstructions = findViewById(R.id.txtViewInstructions);
+        calendarView = findViewById(R.id.calendarWorkouts);
+        calendar = Calendar.getInstance();
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+
+            }
+        });
         btnAddWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,12 +71,17 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
             }
         });
         initRecyclerView();
-
+        setDate();
         loadWorkoutList();
         updateInstructionsVisibility();
         recyclerViewAdapter.setWorkoutInterface(this);
     }
-        @Override
+    public void setDate(){
+        long milli = System.currentTimeMillis();
+        calendar.setTimeInMillis(milli);
+        calendarView.setDate(milli);
+    }
+    @Override
     public void onItemClick(WorkoutItem workoutItem) {
             Intent intent = new Intent(MainActivity.this, Workout.class);
             intent.putExtra("WORKOUT_NAME", workoutItem.getWorkoutName()); // Pass workout details
@@ -128,7 +146,23 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
     private void loadWorkoutList() {
         AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
         List<WorkoutItem> workoutList = database.workoutDao().getAllWorkoutItems();
+        updateWorkoutItemPositions(workoutList);
+        workoutList = database.workoutDao().getAllWorkoutItems();
+
         recyclerViewAdapter.setWorkoutList(workoutList);
+        recyclerViewAdapter.notifyDataSetChanged();
+    }
+    private void updateWorkoutItemPositions(List<WorkoutItem> workoutList) {
+        AppDatabase database = AppDatabase.getInstance(getApplicationContext());
+        database.runInTransaction(() -> {
+        for (int i = 0; i < workoutList.size(); i++) {
+            WorkoutItem workoutItem = workoutList.get(i);
+            workoutItem.setPosition(i); // Update the position in the WorkoutItem
+
+            // Update the WorkoutItem in the database
+            database.workoutDao().updateWorkoutItemPosition(workoutItem.getId(), workoutItem.getPosition());
+        }
+        });
     }
 
     private class DragAndDropCallback extends ItemTouchHelper.SimpleCallback{
@@ -140,8 +174,21 @@ public class MainActivity extends AppCompatActivity implements WorkoutInterface{
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
 
-            // Notify the adapter of the move
-            recyclerViewAdapter.moveWorkoutItem(fromPosition, toPosition);
+            List<WorkoutItem> workoutList = recyclerViewAdapter.getWorkoutList();
+            if (workoutList != null && fromPosition != RecyclerView.NO_POSITION && toPosition != RecyclerView.NO_POSITION) {
+
+                WorkoutItem movedItem = workoutList.get(fromPosition);
+
+                workoutList.remove(fromPosition);
+
+                workoutList.add(toPosition, movedItem);
+
+                // Notify adapter of the item movement
+                recyclerViewAdapter.notifyItemMoved(fromPosition, toPosition);
+
+                // Update positions in the database
+                updateWorkoutItemPositions(workoutList);
+            }
             return true;
         }
 

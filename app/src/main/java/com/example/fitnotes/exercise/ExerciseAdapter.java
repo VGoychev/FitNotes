@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitnotes.R;
+import com.example.fitnotes.workout.AppDatabase;
 import com.example.fitnotes.workout.WorkoutAdapter;
 import com.example.fitnotes.workout.WorkoutInterface;
 import com.example.fitnotes.workout.WorkoutItem;

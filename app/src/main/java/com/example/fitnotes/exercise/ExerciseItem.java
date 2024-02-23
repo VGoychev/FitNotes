@@ -18,7 +18,15 @@ public class ExerciseItem {
     public String exerciseName;
     @ColumnInfo(name = "workout_id")
     public int workoutId;
+    @ColumnInfo(name = "position")
+    public int position;
+    public void setPosition(int newPosition) {
+        this.position = newPosition;
+    }
 
+    public int getPosition() {
+        return position;
+    }
     public int getId() {
         return id;
     }

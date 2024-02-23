@@ -76,5 +76,23 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_workout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="350dp"/>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CalendarView
+        android:id="@+id/calendarWorkouts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:background="@color/RecipeCard"
+        android:dateTextAppearance="@style/CalendarViewDateCustom"
+        android:theme="@style/CalendarViewCustom"
+        android:weekDayTextAppearance="@style/CalendarViewWeekCustom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

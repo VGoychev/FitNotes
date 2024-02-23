@@ -12,5 +12,16 @@
         <item name="android:textColor">@color/white</item>
 
     </style>
+    <style name="CalendarViewCustom" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/gray</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+    <style name="CalendarViewWeekCustom" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CalendarViewDateCustom" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@drawable/selector_custom_calendar</item>
+    </style>
     <style name="Theme.FitNotes" parent="Base.Theme.FitNotes" />
 </resources>

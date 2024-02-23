@@ -59,6 +59,12 @@ public class Workout extends AppCompatActivity implements ExerciseInterface {
         updateInstructionsVisibility();
     }
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload the exercise list when the activity is resumed
+        loadExerciseList();
+    }
+    @Override
     public void onItemClick(ExerciseItem exerciseItem) {
         Intent intent = new Intent(Workout.this, Exercise.class);
         intent.putExtra("EXERCISE_NAME", exerciseItem.getExerciseName()); // Pass workout details
@@ -166,12 +172,24 @@ public class Workout extends AppCompatActivity implements ExerciseInterface {
         itemTouchHelper.attachToRecyclerView(recyclerView);
         itemTouchHelper1.attachToRecyclerView(recyclerView);
     }
+    private void updateExerciseListWithDatabasePositions(List<ExerciseItem> exercisesForWorkout) {
+        // Here you might want to compare the positions in the 'exercisesForWorkout' list
+        // with the positions in the database after the update and synchronize them.
+        // Iterate through the list and update positions if necessary.
+        // For example, if your ExerciseItem has an ID field:
+        for (ExerciseItem exercise : exercisesForWorkout) {
+            AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
+            ExerciseItem updatedExercise = database.exerciseDao().getExerciseById(exercise.getId());
+            exercise.setPosition(updatedExercise.getPosition());
+        }
+    }
     private void loadExerciseList() {
         AppDatabase database = AppDatabase.getInstance(this.getApplicationContext());
         int selectedWorkoutId = getIntent().getIntExtra("WORKOUT_ID", -1);
         if (selectedWorkoutId != -1) {
             // Fetch exercises associated with the selected workout ID
             List<ExerciseItem> exercisesForWorkout = database.exerciseDao().getExercisesForWorkout(selectedWorkoutId);
+            updateExerciseListWithDatabasePositions(exercisesForWorkout);
             recyclerViewAdapter.setExerciseList(exercisesForWorkout);
             recyclerViewAdapter.notifyDataSetChanged();
         } else {

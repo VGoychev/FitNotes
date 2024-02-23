@@ -20,10 +20,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.ViewHold
     private List<WorkoutItem> workoutList;
     private Context context;
     private WorkoutInterface workoutInterface;
-    public void moveWorkoutItem(int fromPosition, int toPosition) {
-        Collections.swap(workoutList, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
-    }
+
     public void setWorkoutInterface(WorkoutInterface workoutInterface) {
         this.workoutInterface = workoutInterface;
     }

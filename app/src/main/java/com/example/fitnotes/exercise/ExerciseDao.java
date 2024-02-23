@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.fitnotes.exercise.ExerciseItem;
 import com.example.fitnotes.workout.WorkoutItem;
@@ -16,6 +17,8 @@ public interface ExerciseDao {
     List<ExerciseItem> getExercisesForWorkout(int workoutId);
     @Query("SELECT * FROM exerciseitem WHERE id = :exerciseId")
     ExerciseItem getExerciseById(int exerciseId);
+    @Query("UPDATE ExerciseItem SET position = :newPosition WHERE id = :exerciseId")
+    void updateExerciseItemPosition(int exerciseId, int newPosition);
     @Insert
     void insertExerciseItem(ExerciseItem... exerciseItems);
     @Delete

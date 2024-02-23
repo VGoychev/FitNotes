@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FitNotes</string>
+    <string name="app_name">Fit Notes</string>
     <string name="radio_male">Male</string>
     <string name="radio_female">Female</string>
     <string name="enterHeight">Enter Height(cm)</string>
